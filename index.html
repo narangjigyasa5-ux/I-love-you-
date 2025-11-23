@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For You My Love ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    :root {
+      --accent: #7a0035;
+      --accent2: #c71546;
+      --accent-soft: #f3b7c8;
+      --text: #2a1217;
+      --text-soft: #5a3039;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", system-ui, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #5c0d2c 0%, transparent 55%),
+        radial-gradient(circle at bottom, #6d0830 0%, transparent 55%),
+        linear-gradient(135deg, #14000c, #ffe3eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      padding: 20px;
+      color: var(--text);
+      position: relative;
+    }
+
+    /* PAGE */
+    .page {
+      display: none;
+      width: 100%;
+      max-width: 520px;
+      background: rgba(255,245,248,0.92);
+      border-radius: 24px;
+      padding: 28px 22px 26px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+      animation: fadeIn 0.7s ease;
+      position: relative;
+      z-index: 5;
+    }
+    .page.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--accent2);
+      margin-bottom: 12px;
+      font-size: 2rem;
+    }
+    p {
+      text-align: center;
+      font-size: 1.1rem;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(135deg, var(--accent2), #ff5f85);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 14px;
+      box-shadow: 0 10px 24px rgba(199,21,70,0.5);
+      transition: .2s ease;
+    }
+
+    /* HEARTS */
+    .click-heart {
+      position: fixed;
+      width: 80px;
+      height: 80px;
+      background: var(--accent2);
+      transform: rotate(-45deg);
+      cursor: pointer;
+      z-index: 20;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+      animation: float 4s ease-in-out infinite;
+    }
+    .click-heart::before,
+    .click-heart::after {
+      content: "";
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background: var(--accent2);
+      border-radius: 50%;
+    }
+    .click-heart::before { top: -40px; left: 0; }
+    .click-heart::after { left: 40px; top: 0; }
+
+    .click-heart.popped {
+      animation: popAway 0.3s forwards;
+    }
+    @keyframes popAway {
+      to { transform: rotate(-45deg) scale(0); opacity: 0; }
+    }
+
+    /* LABELS */
+    .heart-label {
+      position: fixed;
+      font-size: .9rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 3px 8px rgba(0,0,0,0.6);
+      z-index: 25;
+      pointer-events: none;
+      transition: opacity .5s ease;
+    }
+
+    .hide-labels {
+      opacity: 0;
+    }
+
+    /* HEART positions */
+    .h1 { top: 12%; left: 6%; }
+    .h2 { top: 20%; right: 8%; }
+    .h3 { top: 48%; left: 3%; }
+    .h4 { top: 58%; right: 5%; }
+    .h5 { bottom: 22%; left: 14%; }
+    .h6 { bottom: 20%; right: 14%; }
+    .h7 { top: 6%; right: 42%; }
+    .h8 { bottom: 8%; left: 42%; }
+
+    .label1 { top: 8%; left: 6%; }
+    .label2 { top: 16%; right: 10%; }
+    .label3 { top: 44%; left: 6%; }
+    .label4 { top: 55%; right: 8%; }
+    .label5 { bottom: 30%; left: 15%; }
+    .label6 { bottom: 28%; right: 15%; }
+    .label7 { top: 2%; right: 42%; }
+    .label8 { bottom: 15%; left: 42%; }
+
+    /* FORTUNE */
+    .fortune {
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffeaf1;
+      padding: 12px 20px;
+      border-radius: 18px;
+      font-size: .95rem;
+      color: var(--accent2);
+      border: 1px solid var(--accent-soft);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.35);
+      opacity: 0;
+      transition: 0.35s;
+      z-index: 50;
+    }
+    .fortune.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(4px);
+    }
+
+    /* BEAR POPUPS */
+    .bear-popup {
+      display: none;
+      text-align: center;
+      margin-top: 18px;
+      animation: popIn .3s ease;
+    }
+    .bear-emoji {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(.6); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* CONFETTI */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 16px;
+      border-radius: 2px;
+      animation: confettiFall 2s linear;
+      z-index: 200;
+    }
+    @keyframes confettiFall {
+      from { transform: translateY(-20vh); }
+      to   { transform: translateY(120vh); }
+    }
+
+    /* FINAL PHOTO */
+    .love-photo {
+      width: 100%;
+      border-radius: 20px;
+      margin: 16px 0 18px;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.45);
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- HEARTS + LABELS -->
+  <div class="click-heart h1" data-heart></div><div class="heart-label label1">Click me 💖</div>
+  <div class="click-heart h2" data-heart></div><div class="heart-label label2">Tap me 💕</div>
+  <div class="click-heart h3" data-heart></div><div class="heart-label label3">Click me 💖</div>
+  <div class="click-heart h4" data-heart></div><div class="heart-label label4">Tap me 💕</div>
+  <div class="click-heart h5" data-heart></div><div class="heart-label label5">Click me 💖</div>
+  <div class="click-heart h6" data-heart></div><div class="heart-label label6">Tap me 💕</div>
+  <div class="click-heart h7" data-heart></div><div class="heart-label label7">Click me 💖</div>
+  <div class="click-heart h8" data-heart></div><div class="heart-label label8">Tap me 💕</div>
+
+  <div class="fortune" id="fortuneBox"></div>
+
+  <!-- PAGE 1 -->
+  <div class="page active" id="page1">
+    <h1>Hi my love ❤️</h1>
+    <p>You make my heart feel soft and warm.</p>
+    <p>I miss you in the sweetest way.</p>
+    <button class="btn" onclick="goToPage(2)">Next page ➜</button>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div class="page" id="page2">
+    <h1>Choose What You Feel 💕</h1>
+    <p>Tap one and I’ll react for you.</p>
+
+    <button class="btn" onclick="showBear('miss')">Tap if you miss me</button>
+    <div class="bear-popup" id="bear-miss">
+      <div class="bear-emoji">🧸</div>
+      <p>I miss you too ❤️</p>
+    </div>
+
+    <button class="btn" onclick="showBear('hug')">Tap if you want to hug me</button>
+    <div class="bear-popup" id="bear-hug">
+      <div class="bear-emoji">🧸🤗</div>
+      <p>Come in my arms 🤍</p>
+    </div>
+
+    <button class="btn" onclick="showBear('kiss')">Tap if you want to kiss me</button>
+    <div class="bear-popup" id="bear-kiss">
+      <div class="bear-emoji">🧸💋</div>
+      <p>Muahh baby 💋❤️</p>
+    </div>
+
+    <button class="btn" onclick="goToPage(3)">Next ➜</button>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div class="page" id="page3">
+    <h1>I Love You ❤️</h1>
+
+    <img class="love-photo"
+         src="https://i.ibb.co/9HCfPWGt/Whats-App-Image-2025-11-22-at-11-05-16-PM.jpg">
+
+    <p>My favorite picture. My favorite person.</p>
+    <p>I love you so much.</p>
+  </div>
+
+<script>
+  function goToPage(n) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page' + n).classList.add('active');
+  }
+
+  const hearts = document.querySelectorAll('[data-heart]');
+  const labels = document.querySelectorAll('.heart-label');
+  const fortuneBox = document.getElementById('fortuneBox');
+  let labelsGone = false;
+
+  const messages = [
+    "You are my favorite feeling.",
+    "Thinking of you makes me smile.",
+    "My heart chooses you, always.",
+    "You make everything softer.",
+    "You’re my sweetest thought.",
+    "You’re my comfort.",
+    "You are my whole heart.",
+    "You make me happy."
+  ];
+
+  hearts.forEach((heart, index) => {
+    heart.addEventListener('click', () => {
+
+      heart.classList.add('popped');
+
+      fortuneBox.textContent = messages[index % messages.length];
+      fortuneBox.classList.add('show');
+      setTimeout(() => fortuneBox.classList.remove('show'), 2600);
+
+      /* HIDE LABELS AFTER FIRST TAP */
+      if (!labelsGone) {
+        labels.forEach(lbl => lbl.classList.add('hide-labels'));
+        labelsGone = true;
+      }
+    });
+  });
+
+  function confetti() {
+    for (let i = 0; i < 25; i++) {
+      let c = document.createElement("div");
+      c.className = "confetti";
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.background = ["#ff3e6b","#ffb3c7","#ffd86b","#980036"][Math.floor(Math.random()*4)];
+      c.style.animationDuration = (Math.random() * 1.5 + 1.2) + "s";
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 2200);
+    }
+  }
+
+  function showBear(type) {
+    document.querySelectorAll('.bear-popup').forEach(b => b.style.display = "none");
+    document.getElementById("bear-" + type).style.display = "block";
+    confetti();
+  }
+</script>
+
+</body>
+</html>
